@@ -1,0 +1,12 @@
+.pio/
+backup/
+.vscode/
+
+# KiCad backups, locks and caches
+hardware/fox-backups/
+hardware/_autosave-*
+hardware/~*.lck
+hardware/*.kicad_prl
+hardware/fp-info-cache
+hardware/__pycache__/
+hardware/drc.json

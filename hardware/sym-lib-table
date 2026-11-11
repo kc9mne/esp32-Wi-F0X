@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "fox")(type "KiCad")(uri "${KIPRJMOD}/fox.kicad_sym")(options "")(descr "Parts missing from the stock libraries"))
+)

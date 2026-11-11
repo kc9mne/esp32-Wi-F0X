@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "fox")(type "KiCad")(uri "${KIPRJMOD}/lib/fox.pretty")(options "")(descr "LCSC parts, pads renumbered by fix_footprints.py"))
+)
