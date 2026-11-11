@@ -58,7 +58,7 @@ Other serial commands: `t` sends one test cycle, `r` restarts, `h` runs a web se
    random password on first boot (two letters and six digits, e.g. `kc482913`) and keeps it.
 3. Open `http://192.168.4.1` on the phone.
 4. Open **Settings**, enter **your callsign**, fox number, frequency and timing, and save.
-   The default callsign is `N0CALL`: change it before you transmit.
+   The callsign starts as the placeholder `F0X-01`: change it to yours before you transmit.
 5. Press **Test** to send one cycle, then **Start**. With a start delay set, the fox waits
    before its first transmission (handy for MF-50-style sequencing).
 6. For voice, open **Audio** and upload clips from your phone.

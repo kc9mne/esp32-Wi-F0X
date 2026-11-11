@@ -102,7 +102,7 @@ constexpr int ESTIMATED_ID_SECONDS = 15;
 
 struct Settings {
   String foxId = "1";
-  String callsign = "N0CALL";  // set your own callsign on the settings page
+  String callsign = "F0X-01";  // placeholder: set your own callsign on the settings page
   String message = "";
   float frequency = 146.565;
   int power = 2;
