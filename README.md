@@ -11,10 +11,10 @@ programming cable, no app. It has been used at a real hunt alongside Byonics Mic
 
 ### Demo
 
-[![Prototype on the bench, OLED showing TX VOICE, with a handheld tuned to 146.590 receiving it](media/wi-f0x-demo-thumb.jpg)](media/wi-f0x-demo.mp4)
+[![Wi-F0X demo on YouTube: the prototype sending a voice clip and tracking tones](media/wi-f0x-demo-thumb.jpg)](https://youtu.be/PTlThZ83Uh0)
 
-The prototype on the bench sending a voice clip and tracking tones, received on a handheld
-(41 s, [MP4](media/wi-f0x-demo.mp4)).
+The prototype on the bench sending a voice clip and tracking tones, received on a handheld.
+[Watch on YouTube](https://youtu.be/PTlThZ83Uh0) (41 s).
 
 ## Features
 
@@ -44,11 +44,9 @@ The prototype on the bench sending a voice clip and tracking tones, received on 
 A clear tube with rubber end caps makes a see-through, water-resistant fox: you can read the
 OLED without opening it, and the antenna comes out through one cap.
 
-- **Tube:** MECCANIXITY rigid clear polycarbonate tube, 1.5 in (37.6 mm) ID, 1.6 in (40 mm)
-  OD, 9.6 in (245 mm) long. One tube is enough for two foxes.
-- **End caps:** standard 1.5 in rubber end caps, two per fox.
-- Where I bought them: [Amazon B07RGMFH9F](https://www.amazon.com/dp/B07RGMFH9F),
-  [Amazon B0BKQCXM6C](https://www.amazon.com/dp/B0BKQCXM6C).
+- **Tube:** [MECCANIXITY rigid clear polycarbonate tube](https://www.amazon.com/dp/B0BKQCXM6C),
+  1.5 in (37.6 mm) ID, 1.6 in (40 mm) OD, 9.6 in (245 mm) long. One tube is enough for two foxes.
+- **End caps:** [standard 1.5 in rubber end caps](https://www.amazon.com/dp/B07RGMFH9F), two per fox.
 
 Cut the tube in half (about 4.8 in each) so the T-Beam (with its 18650) slides in, fit a cap on each end, and
 pass the antenna through a hole in one cap. Pull a cap off to reach the power switch.
