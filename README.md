@@ -14,7 +14,8 @@ programming cable, no app. It has been used at a real hunt alongside Byonics Mic
 [![Wi-F0X demo on YouTube: the prototype sending a voice clip and tracking tones](media/wi-f0x-demo-thumb.jpg)](https://youtu.be/PTlThZ83Uh0)
 
 The prototype on the bench sending a voice clip and tracking tones, received on a handheld.
-[Watch on YouTube](https://youtu.be/PTlThZ83Uh0) (41 s).
+[Watch on YouTube](https://youtu.be/PTlThZ83Uh0) (41 s), or
+[download the MP4](https://github.com/kc9mne/esp32-Wi-F0X/raw/main/media/wi-f0x-demo-720p.mp4) (8 MB).
 
 ## Features
 
