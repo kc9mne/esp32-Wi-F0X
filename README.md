@@ -9,6 +9,7 @@ programming cable, no app. It has been used at a real hunt alongside Byonics Mic
 
 ![Wi-F0X in its clear tube enclosure, OLED showing fox ID, state and battery](media/wi-f0x-tube.jpg)
 
+### Demo
 
 https://github.com/user-attachments/assets/96026c00-8a75-42aa-9971-1123c974c956
 
