@@ -17,8 +17,8 @@ programming cable, no app. It has been used at a real hunt alongside Byonics Mic
   and play one clip per cycle, true FM. Good for jokes, taunts, or announcements.
 - **Phone control page:** frequency, power, tone length, interval, start delay, run limit,
   pitch, Morse speed, auto start, and start/stop/test buttons.
-- **OLED status:** fox ID and call, frequency and power, beacon state with countdown,
-  battery percent and estimated runtime, Wi-Fi name and password.
+- **OLED status:** a KC9MNE Wi-F0X boot screen, then fox ID and call, frequency and power, beacon state with countdown,
+  battery percent and estimated runtime, Wi-Fi name and password, and a Wi-Fi QR code.
 - **Settings survive power-off** (stored in the ESP32's flash).
 - **Power:** 2-10 dBm selectable. The CPU idles at 80 MHz and only steps up for voice.
 
@@ -52,9 +52,11 @@ Other serial commands: `t` sends one test cycle, `r` restarts, `h` runs a web se
 
 1. Power on. The OLED shows the Wi-F0X boot screen, then the status screen.
 2. Wi-Fi is on for 5 minutes after boot. Press **BOOT** to turn it on again later.
-   The OLED shows the network name (`FOX-xxxx`) and alternates it with the password.
-   Each fox makes its own random password on first boot and keeps it.
-3. Join that network on your phone and open `http://192.168.4.1`.
+   Until a phone joins, the OLED alternates between the status screen and a **QR code**:
+   point your phone camera at it to join the fox's network. The network name (`FOX-xxxx`)
+   and password are shown beside the code for typing in by hand. Each fox makes its own
+   random password on first boot (two letters and six digits, e.g. `kc482913`) and keeps it.
+3. Open `http://192.168.4.1` on the phone.
 4. Open **Settings**, enter **your callsign**, fox number, frequency and timing, and save.
    The default callsign is `N0CALL`: change it before you transmit.
 5. Press **Test** to send one cycle, then **Start**. With a start delay set, the fox waits

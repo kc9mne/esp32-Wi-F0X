@@ -22,6 +22,7 @@
 
 #define XPOWERS_CHIP_AXP2101
 #include <XPowersLib.h>
+#include <qrcode.h>
 
 // Pin map from LilyGO's T-Beam Supreme 144-148 MHz hardware doc.
 constexpr int PIN_OLED_SDA = 17;
@@ -55,7 +56,7 @@ constexpr float NORMAL_DEVIATION_KHZ = 5.0;
 // Clips are 8 kHz mono 16-bit WAV files, converted by the phone's browser.
 constexpr const char *AUDIO_DIR = "/audio";
 constexpr uint32_t CLIP_RATE = 8000;
-constexpr uint32_t SPLASH_MS = 2000;
+constexpr uint32_t SPLASH_MS = 3000;
 constexpr uint32_t CLIP_SAMPLE_US = 125;
 constexpr size_t CLIP_HEADER_BYTES = 44;
 constexpr size_t CLIP_BUFFER_SAMPLES = 2048;
@@ -1069,20 +1070,35 @@ void stopWifi() {
   Serial.println("WiFi off: window ended with no clients");
 }
 
+// True for a password in the current format: two lowercase letters then six digits.
+bool quickPassword(const String &pw) {
+  if (pw.length() != 8) {
+    return false;
+  }
+  for (int i = 0; i < 8; i++) {
+    if (i < 2 ? !islower(pw[i]) : !isdigit(pw[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
 void setupWifi() {
   uint64_t mac = ESP.getEfuseMac();
   char suffix[5];
   snprintf(suffix, sizeof(suffix), "%04X", static_cast<uint16_t>(mac >> 32));
   wifiSsid = String("FOX-") + suffix;
-  // Each fox makes its own random password on first boot and keeps it; the OLED shows it.
-  // (A password built from the SSID would let anyone who has read this code join any fox.)
+  // Each fox makes its own random password on first boot and keeps it; the OLED shows it and
+  // a QR code for it. (A password built from the SSID would let anyone who has read this code
+  // join any fox.) Two lowercase letters then six digits: quick to type on a phone, and still
+  // about 500 million combinations, plenty for a network that is up only a few minutes at a time.
   preferences.begin("fox", false);
   wifiPassword = preferences.getString("wifiPw", "");
-  if (wifiPassword.length() < 8) {
-    const char *letters = "abcdefghjkmnpqrstuvwxyz23456789";  // no 0/o, 1/l/i to misread
+  if (!quickPassword(wifiPassword)) {
+    const char *letters = "abcdefghjkmnpqrstuvwxyz";  // no i, l or o to misread as 1 or 0
     wifiPassword = "";
     for (int i = 0; i < 8; i++) {
-      wifiPassword += letters[esp_random() % strlen(letters)];
+      wifiPassword += i < 2 ? letters[esp_random() % strlen(letters)] : char('0' + esp_random() % 10);
     }
     preferences.putString("wifiPw", wifiPassword);
   }
@@ -1158,6 +1174,8 @@ void drawSplash() {
     return;
   }
   display.clearBuffer();
+  display.drawRFrame(0, 0, 128, 64, 5);
+  display.drawRFrame(2, 2, 124, 60, 4);
   display.setFont(u8g2_font_9x15B_tr);
   display.drawStr((128 - display.getStrWidth("KC9MNE")) / 2, 22, "KC9MNE");
   display.setFont(u8g2_font_helvB18_tr);
@@ -1208,12 +1226,19 @@ void setupRadio() {
   Serial.printf("SX1278 state %d\n", radioState);
 }
 
+void drawWifiQr();
+
 void drawDisplay() {
   if (!displayReady) {
     return;
   }
   static uint32_t tick = 0;
   tick++;
+  // While Wi-Fi is up and no phone has joined yet, alternate 4 s of status with 4 s of QR.
+  if (wifiOn && WiFi.softAPgetStationNum() == 0 && tick % 8 >= 4) {
+    drawWifiQr();
+    return;
+  }
   Settings current = currentSettings();
   String idLine = "ID:" + current.foxId + " " + current.callsign;
   String radioLine = String(current.frequency, 3) + " MHz " + String(current.power) + "dBm";
@@ -1230,6 +1255,38 @@ void drawDisplay() {
   display.drawStr(0, 24, radioLine.c_str());
   display.drawStr(0, 52, batteryText(latestBattery).c_str());
   display.drawStr(0, 63, wifiLine.c_str());
+  display.sendBuffer();
+}
+
+// Wi-Fi join screen: a QR code a phone camera can scan to join the fox's network, with the
+// network name and password beside it for typing in by hand. Version 3 (29 x 29 modules) at
+// 2 pixels a module is 58 pixels, drawn dark on a lit square so phones read it like print.
+void drawWifiQr() {
+  String join = "WIFI:T:WPA;S:" + wifiSsid + ";P:" + wifiPassword + ";;";
+  QRCode qr;
+  uint8_t data[qrcode_getBufferSize(3)];
+  qrcode_initText(&qr, data, 3, ECC_LOW, join.c_str());
+  display.clearBuffer();
+  display.setDrawColor(1);
+  display.drawBox(0, 0, 64, 64);
+  display.setDrawColor(0);
+  int origin = (64 - qr.size * 2) / 2;
+  for (uint8_t y = 0; y < qr.size; y++) {
+    for (uint8_t x = 0; x < qr.size; x++) {
+      if (qrcode_getModule(&qr, x, y)) {
+        display.drawBox(origin + x * 2, origin + y * 2, 2, 2);
+      }
+    }
+  }
+  display.setDrawColor(1);
+  display.setFont(u8g2_font_6x12_tr);
+  display.drawStr(68, 10, "Scan to");
+  display.drawStr(68, 21, "join:");
+  display.drawStr(68, 36, wifiSsid.c_str());
+  display.setFont(u8g2_font_7x13B_tr);
+  display.drawStr(68, 50, wifiPassword.c_str());
+  display.setFont(u8g2_font_5x8_tr);
+  display.drawStr(68, 62, "192.168.4.1");
   display.sendBuffer();
 }
 
@@ -1265,7 +1322,7 @@ void setup() {
   }
   setCpuFrequencyMhz(IDLE_CPU_MHZ);
   Serial.printf("CPU %lu MHz\n", getCpuFrequencyMhz());
-  // Keep the boot screen up for 2 s in all, counting the time setup already took.
+  // Keep the boot screen up for 3 s in all, counting the time setup already took.
   while (millis() - splashShown < SPLASH_MS) {
     delay(10);
   }
